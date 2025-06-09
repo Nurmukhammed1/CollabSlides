@@ -4,6 +4,14 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace CollabSlides.Hubs;
 
+public class TextBlockUpdateData
+{
+    public Guid PresentationId { get; set; }
+    public int SlideIndex { get; set; }
+    public TextBlock TextBlock { get; set; }
+    public Guid UserId { get; set; }
+}
+
 public class PresentationHub : Hub
 {
     private readonly ApplicationDbContext _context;
@@ -33,46 +41,46 @@ public class PresentationHub : Hub
             .SendAsync("UserLeft", new { userId = userId });
     }
 
-    public async Task TextBlockUpdated(Guid presentationId, int slideIndex, TextBlock textBlock, Guid userId)
+    public async Task UpdateTextBlock(TextBlockUpdateData data)
     {
         var presentation = await _context.Presentations
             .Include(p => p.PresentationUsers)
             .Include(p => p.Slides)
-            .FirstOrDefaultAsync(p => p.Id == presentationId);
+            .FirstOrDefaultAsync(p => p.Id == data.PresentationId);
 
         if (presentation != null)
         {
             var userRole = presentation.PresentationUsers
-                .FirstOrDefault(pu => pu.UserId == userId)?.Role;
+                .FirstOrDefault(pu => pu.UserId == data.UserId)?.Role;
 
             if (userRole == "creator" || userRole == "editor")
             {
-                var slide = presentation.Slides.FirstOrDefault(s => s.Index == slideIndex);
+                var slide = presentation.Slides.FirstOrDefault(s => s.Index == data.SlideIndex);
                 if (slide != null)
                 {
-                    var existingBlock = slide.Content.FirstOrDefault(tb => tb.Id == textBlock.Id);
+                    var existingBlock = slide.Content.FirstOrDefault(tb => tb.Id == data.TextBlock.Id);
                     if (existingBlock != null)
                     {
-                        existingBlock.Content = textBlock.Content;
-                        existingBlock.X = textBlock.X;
-                        existingBlock.Y = textBlock.Y;
-                        existingBlock.Width = textBlock.Width;
-                        existingBlock.Height = textBlock.Height;
-                        existingBlock.FontSize = textBlock.FontSize;
-                        existingBlock.FontWeight = textBlock.FontWeight;
-                        existingBlock.FontStyle = textBlock.FontStyle;
-                        existingBlock.TextAlign = textBlock.TextAlign;
+                        existingBlock.Content = data.TextBlock.Content;
+                        existingBlock.X = data.TextBlock.X;
+                        existingBlock.Y = data.TextBlock.Y;
+                        existingBlock.Width = data.TextBlock.Width;
+                        existingBlock.Height = data.TextBlock.Height;
+                        existingBlock.FontSize = data.TextBlock.FontSize;
+                        existingBlock.FontWeight = data.TextBlock.FontWeight;
+                        existingBlock.FontStyle = data.TextBlock.FontStyle;
+                        existingBlock.TextAlign = data.TextBlock.TextAlign;
                     }
                     else
                     {
-                        slide.Content.Add(textBlock);
+                        slide.Content.Add(data.TextBlock);
                     }
 
                     await _context.SaveChangesAsync();
                 }
-
-                await Clients.Group($"presentation_{presentationId}")
-                    .SendAsync("TextBlockUpdated", new { textBlock = textBlock });
+                
+                await Clients.GroupExcept($"presentation_{data.PresentationId}", Context.ConnectionId)
+                    .SendAsync("TextBlockUpdated", new { textBlock = data.TextBlock });
             }
         }
     }

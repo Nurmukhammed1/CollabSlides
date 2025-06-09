@@ -146,3 +146,4 @@
 /Users/nurmukhammedkanafin/RiderProjects/CollabSlides/CollabSlides/obj/Release/net8.0/CollabSlides.pdb
 /Users/nurmukhammedkanafin/RiderProjects/CollabSlides/CollabSlides/obj/Release/net8.0/CollabSlides.genruntimeconfig.cache
 /Users/nurmukhammedkanafin/RiderProjects/CollabSlides/CollabSlides/obj/Release/net8.0/ref/CollabSlides.dll
+/Users/nurmukhammedkanafin/RiderProjects/CollabSlides/CollabSlides/obj/Release/net8.0/CollabSlides.sourcelink.json

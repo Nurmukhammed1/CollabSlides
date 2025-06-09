@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CollabSlides")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0abba920e3db39ca9e1350c651c76ed64b1281b")]
 [assembly: System.Reflection.AssemblyProductAttribute("CollabSlides")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CollabSlides")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

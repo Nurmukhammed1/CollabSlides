@@ -71,7 +71,7 @@ public class PresentationsController : ControllerBase
             Id = presentation.Id,
             Name = presentation.Name,
             CreatorName = user.Nickname,
-            ActiveUsers = 1 // The creator is the first active user
+            ActiveUsers = 1 
         };
 
         return CreatedAtAction(nameof(GetPresentations), new { id = presentation.Id }, response);
